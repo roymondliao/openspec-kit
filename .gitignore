@@ -1,3 +1,6 @@
+# Build output
+dist/
+
 # dependencies
 /node_modules
 /.pnp
