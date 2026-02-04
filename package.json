@@ -1,0 +1,52 @@
+{
+  "name": "openspec-kit",
+  "version": "0.1.0",
+  "description": "Project-scoped helpers for OpenSpec context templates",
+  "keywords": [
+    "openspec",
+    "cli",
+    "templates",
+    "context",
+    "scaffold"
+  ],
+  "homepage": "https://github.com/roymondliao/openspec-kit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roymondliao/openspec-kit"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "opsx-kit": "./bin/opsx-kit.js"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm run build && pnpm publish --access public --no-git-checks",
+    "lint": "eslint src/",
+    "test": "pnpm run build && node --test test/**/*.test.mjs",
+    "prepare": "pnpm run build"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "dependencies": {
+    "commander": "^14.0.0"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@types/node": "^24.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
+  }
+}
