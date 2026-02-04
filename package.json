@@ -31,7 +31,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "check:pack-version": "node scripts/pack-version-check.mjs",
-    "release": "pnpm run build && npm publish --access public --no-git-checks",
+    "release": "pnpm run build && npm publish --access public --no-git-checks --provenance",
     "lint": "eslint src/",
     "test": "pnpm run build && node --test",
     "prepare": "pnpm run build",
