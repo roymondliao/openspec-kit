@@ -12,9 +12,13 @@ permissions:
 
 jobs:
   test:
-    name: Lint & Test
-    runs-on: ubuntu-latest
+    name: Lint & Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
         with:
