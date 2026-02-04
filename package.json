@@ -1,6 +1,6 @@
 {
   "name": "openspec-kit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Project-scoped helpers for OpenSpec context templates",
   "keywords": [
     "openspec",

@@ -1,4 +1,4 @@
-name: CI
+name: CI / Lint & Test
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  lint_test:
     name: Lint & Test (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
@@ -20,19 +20,31 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: pnpm/action-setup@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 9
-      - uses: actions/setup-node@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20.19.0'
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Changeset status
         if: github.event_name == 'pull_request'
         run: pnpm exec changeset status --since=origin/main
-      - run: pnpm lint
-      - run: pnpm test
+      
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test
+        run: pnpm test
