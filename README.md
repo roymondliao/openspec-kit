@@ -2,6 +2,8 @@
 
 Project-scoped helpers for OpenSpec context templates. This package provides a lightweight CLI that scaffolds template files and injects them into `openspec/config.yaml` so AI assistants have consistent project context.
 
+> **Prerequisite:** Install OpenSpec first: https://github.com/Fission-AI/OpenSpec
+
 ## Install
 
 ```bash
@@ -16,6 +18,9 @@ pnpm exec opsx-kit init
 
 # Inject template content into openspec/config.yaml
 pnpm exec opsx-kit update
+
+# Scaffold an enhanced workflow schema (fork spec-driven + exploration)
+pnpm exec opsx-kit enhanced init <my-workflow>
 ```
 
 ## Commands
@@ -53,6 +58,23 @@ Inject template content into `openspec/config.yaml`.
 pnpm exec opsx-kit update --files tech-stack,conventions
 ```
 
+### `opsx-kit enhanced init`
+
+Scaffold an enhanced workflow schema by forking `spec-driven`, copying the exploration
+template, and patching `schema.yaml` so exploration happens before proposal.
+
+**Options**:
+
+- `[schema]`: Optional schema name (defaults to `exploration-first`)
+- `--schema <name>`: Schema name (overrides positional argument)
+- `--project <dir>`: Project root used to locate `openspec/` (default: current working directory)
+
+**Example**:
+
+```bash
+pnpm exec opsx-kit enhanced init exploration-first
+```
+
 ## Workflow
 
 ```bash
@@ -69,3 +91,7 @@ pnpm exec opsx-kit update
 
 - `update` preserves the existing `schema:` value and any `rules:` section in `openspec/config.yaml`.
 - Templates are shipped inside the package under `templates/`.
+
+## Testing
+
+See [docs/testing.md](./docs/testing.md) for the test workflow.

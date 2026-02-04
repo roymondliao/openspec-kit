@@ -60,7 +60,7 @@ Artifact completion is **filesystem-based**: file exists = DONE. No content-leve
 
 ```yaml
 # openspec/config.yaml
-schema: exploration-first        # Default schema for new changes
+schema: <my-workflow>            # Default schema for new changes
 context: |                       # Injected into ALL artifact instructions
   Project-level context for AI
 rules:                           # Per-artifact constraints
@@ -78,7 +78,7 @@ rules:                           # Per-artifact constraints
 
 ```yaml
 # openspec/config.yaml
-schema: exploration-first
+schema: <my-workflow>
 
 context: |
   ## Tech Stack
@@ -114,7 +114,7 @@ OPSX's instruction-loader wraps `context` in `<project_context>` tags and inject
 #!/bin/bash
 # populate-context.sh
 cat > openspec/config.yaml << 'EOF'
-schema: exploration-first
+schema: <my-workflow>
 
 context: |
 EOF
@@ -137,25 +137,33 @@ done
 
 ### Setup
 
+`<my-workflow>` is a user-defined schema name (e.g. `enhanced`, `team-flow`).
+
+CLI shortcut (recommended):
+
+```bash
+pnpm exec opsx-kit enhanced init <my-workflow>
+```
+
 ```bash
 # 1. Fork the default schema
-openspec schema fork spec-driven exploration-first
+openspec schema fork spec-driven <my-workflow>
 
 # 2. Add exploration template
-cp templates/exploration-template.md openspec/schemas/exploration-first/templates/exploration.md
+cp templates/exploration-template.md openspec/schemas/<my-workflow>/templates/exploration.md
 
 # 3. Edit schema.yaml to add exploration artifact (see below)
 
 # 4. Validate
-openspec schema validate exploration-first
+openspec schema validate <my-workflow>
 ```
 
 ### Schema Definition
 
-Edit `openspec/schemas/exploration-first/schema.yaml`:
+Edit `openspec/schemas/<my-workflow>/schema.yaml`:
 
 ```yaml
-name: exploration-first
+name: <my-workflow>
 version: 1
 description: Exploration-driven workflow with structured pre-proposal analysis
 
@@ -226,7 +234,7 @@ apply:
 
 ### Exploration Template
 
-The template at `openspec/schemas/exploration-first/templates/exploration.md` provides:
+The template at `openspec/schemas/<my-workflow>/templates/exploration.md` provides:
 
 - Task Requirement (scope, success criteria, out of scope)
 - Self Reflection (problem understanding, assumptions)
@@ -261,17 +269,17 @@ specs  design
 ### Usage
 
 ```bash
-# Create a new change with exploration-first schema
-openspec new change my-feature --schema exploration-first
+# Create a new change with your enhanced schema
+openspec new change my-feature --schema <my-workflow>
 
 # Or set as project default in openspec/config.yaml:
-# schema: exploration-first
+# schema: <my-workflow>
 ```
 
 ### Workflow
 
 ```
-/opsx:new my-feature --schema exploration-first
+/opsx:new my-feature --schema <my-workflow>
   → Creates openspec/changes/my-feature/
 
 /opsx:continue
@@ -321,7 +329,7 @@ your-project/
 ├── openspec/
 │   ├── config.yaml                     # Project config (context + rules + default schema)
 │   ├── schemas/
-│   │   └── exploration-first/          # Custom Schema (Enhanced Mode)
+│   │   └── <my-workflow>/              # Custom Schema (Enhanced Mode)
 │   │       ├── schema.yaml             #   Artifact DAG: exploration → proposal → ...
 │   │       └── templates/
 │   │           ├── exploration.md      #   Structured exploration template
@@ -331,7 +339,7 @@ your-project/
 │   │           └── tasks.md
 │   ├── changes/
 │   │   └── {change-id}/
-│   │       ├── .openspec.yaml          #   schema: exploration-first
+│   │       ├── .openspec.yaml          #   schema: <my-workflow>
 │   │       ├── exploration.md          #   Created by /opsx:continue
 │   │       ├── proposal.md
 │   │       ├── design.md
@@ -353,20 +361,20 @@ your-project/
 1. **Create Custom Schema**
 
    ```bash
-   openspec schema fork spec-driven exploration-first
+   openspec schema fork spec-driven <my-workflow>
    ```
-2. **Add exploration artifact** to `openspec/schemas/exploration-first/schema.yaml`
-3. **Copy exploration template** to `openspec/schemas/exploration-first/templates/exploration.md`
+2. **Add exploration artifact** to `openspec/schemas/<my-workflow>/schema.yaml`
+3. **Copy exploration template** to `openspec/schemas/<my-workflow>/templates/exploration.md`
 4. **Configure project context** in `openspec/config.yaml`
 5. **Validate schema**
 
    ```bash
-   openspec schema validate exploration-first
+   openspec schema validate <my-workflow>
    ```
 6. **Use it**
 
    ```bash
-   openspec new change my-feature --schema exploration-first
+   openspec new change my-feature --schema <my-workflow>
    ```
 
 No fork. No npm publish. No code changes. All configuration.

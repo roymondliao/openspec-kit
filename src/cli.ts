@@ -1,4 +1,5 @@
 import { Command } from "commander";
+import { initEnhancedMode } from "./commands/enhanced.js";
 import { initTemplates } from "./commands/init.js";
 import { updateConfig } from "./commands/update.js";
 
@@ -36,6 +37,20 @@ export async function run(argv: string[]): Promise<void> {
         });
       },
     );
+
+  program
+    .command("enhanced")
+    .description("Enhanced mode helpers")
+    .command("init [schema]")
+    .description("Scaffold an enhanced schema fork with exploration")
+    .option("--schema <name>", "Schema name (defaults to exploration-first)")
+    .option("--project <dir>", "Project root (used to locate openspec/)")
+    .action(async (schema: string | undefined, options: { schema?: string; project?: string }) => {
+      await initEnhancedMode({
+        project: options.project,
+        schemaName: schema ?? options.schema,
+      });
+    });
 
   await program.parseAsync(argv);
 }

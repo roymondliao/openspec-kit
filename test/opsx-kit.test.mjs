@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 
+import { initEnhancedMode } from "../dist/commands/enhanced.js";
 import { initTemplates } from "../dist/commands/init.js";
 import { updateConfig } from "../dist/commands/update.js";
 
@@ -41,4 +42,43 @@ test("update writes config.yaml with context", async () => {
   assert.ok(config.includes("schema: spec-driven"));
   assert.ok(config.includes("context: |"));
   assert.ok(config.includes("# Tech Stack"));
+});
+
+test("enhanced init patches schema and copies exploration template", async () => {
+  const projectDir = await createProjectRoot();
+  const openSpecDir = path.join(projectDir, "openspec");
+  const schemaDir = path.join(openSpecDir, "schemas", "enhanced");
+  const schemaTemplatesDir = path.join(schemaDir, "templates");
+  const schemaFile = path.join(schemaDir, "schema.yaml");
+
+  await fs.mkdir(schemaTemplatesDir, { recursive: true });
+  await fs.writeFile(
+    schemaFile,
+    [
+      "name: enhanced",
+      "version: 1",
+      "artifacts:",
+      "  - id: proposal",
+      "    generates: proposal.md",
+      "    description: Proposal",
+      "    template: proposal.md",
+      "  - id: specs",
+      "    generates: specs/**/*.md",
+      "    description: Specs",
+      "    template: spec.md",
+    ].join("\n"),
+    "utf8",
+  );
+
+  await initEnhancedMode({ project: projectDir, schemaName: "enhanced" });
+
+  const patchedSchema = await fs.readFile(schemaFile, "utf8");
+  assert.ok(patchedSchema.includes("- id: exploration"));
+  assert.ok(patchedSchema.includes("requires: [exploration]"));
+
+  const explorationTemplate = await fs.readFile(
+    path.join(schemaTemplatesDir, "exploration.md"),
+    "utf8",
+  );
+  assert.ok(explorationTemplate.includes("# Exploration"));
 });

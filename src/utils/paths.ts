@@ -12,6 +12,10 @@ export function templateDir(): string {
   return path.join(packageRoot(), "templates");
 }
 
+export function schemaAssetDir(): string {
+  return path.join(packageRoot(), "schemas");
+}
+
 export function findOpenSpecDir(startDir: string): string | null {
   let currentDir = path.resolve(startDir);
   while (true) {
